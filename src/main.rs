@@ -243,7 +243,7 @@ async fn main() {
                     draw_text(
                         text,
                         center.x - text_size.width / 2.0,
-                        center.y + y_offset,
+                        center.y - 100.0 + y_offset,
                         FONT_SIZE,
                         DARKGRAY,
                     );
