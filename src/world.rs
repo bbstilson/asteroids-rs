@@ -13,18 +13,8 @@ pub struct World {
 impl World {
     pub fn new() -> World {
         let level = 1;
-        let asteroid_speed = level as f32;
         let mut asteroids = vec![];
-        for _ in 0..level * 2 {
-            let mut solved = false;
-            while !solved {
-                let a = Asteroid::spawn(asteroid_speed);
-                if !asteroids.iter().any(|b| a.collides(b)) {
-                    asteroids.push(a);
-                    solved = true;
-                }
-            }
-        }
+        World::spawn_asteroids(level, &mut asteroids);
 
         World {
             asteroids,
@@ -35,13 +25,25 @@ impl World {
         }
     }
 
+    fn spawn_asteroids(n: u32, asteroids: &mut Vec<Asteroid>) {
+        let asteroid_speed = n as f32;
+
+        for _ in 0..n * 2 {
+            let mut solved = false;
+            while !solved {
+                let a = Asteroid::spawn(asteroid_speed);
+                if !asteroids.iter().any(|b| a.collides(b)) {
+                    asteroids.push(a);
+                    solved = true;
+                }
+            }
+        }
+    }
+
     pub fn next_level(self) -> World {
         let level = self.level + 1;
-        let asteroid_speed = level as f32;
         let mut asteroids = vec![];
-        for _ in 0..level {
-            asteroids.push(Asteroid::spawn(asteroid_speed))
-        }
+        World::spawn_asteroids(level, &mut asteroids);
 
         World {
             level,

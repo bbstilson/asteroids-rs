@@ -22,4 +22,10 @@ impl Sounds {
             engine,
         })
     }
+
+    pub fn stop_all(&self) {
+        for sound in [self.laser, self.explosion, self.engine] {
+            audio::stop_sound(sound)
+        }
+    }
 }

@@ -162,6 +162,7 @@ async fn main() {
                     }
                 }
 
+                // check collisions between all asteroids
                 for asteroid_a in world.asteroids.clone().iter_mut() {
                     for asteroid_b in world.asteroids.iter_mut() {
                         if asteroid_a.position != asteroid_b.position
@@ -184,6 +185,7 @@ async fn main() {
                 for asteroid in world.asteroids.iter_mut() {
                     if world.player.collides(asteroid) {
                         state = GameState::GameOver;
+                        sounds.stop_all();
                     }
                 }
 
@@ -195,22 +197,21 @@ async fn main() {
                     state = GameState::Won;
                 }
 
-                for asteroid in world.asteroids.iter_mut() {
-                    asteroid.draw();
-                }
-
                 // remove any lasers no longer on screen
                 world
                     .lasers
                     .retain(|laser| laser.on_screen() && !laser.collided);
+
+                for asteroid in world.asteroids.iter_mut() {
+                    asteroid.draw();
+                }
                 for laser in world.lasers.iter_mut() {
                     laser.draw();
                 }
-
                 world.player.draw();
             }
             GameState::Won => {
-                let text = format!("Level {} complete!", world.level,);
+                let text = format!("Level {} Complete! [enter] next level?", world.level);
                 let text = text.as_str();
                 let text_size = measure_text(text, None, FONT_SIZE as _, 1.0);
                 draw_text(
